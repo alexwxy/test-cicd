@@ -1,0 +1,41 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - master
+      - release-*
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - master
+      - release-*
+
+permissions:  # added using https://github.com/step-security/secure-workflows
+  contents: read
+
+env:
+  # Common versions
+  GO_VERSION: '1.19'
+  GOLANGCI_VERSION: 'v1.49'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-22.04
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Setup Go environment
+        uses: actions/setup-go@v5.0.0
+        with:
+          # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
+          go-version: ${{ env.GO_VERSION }}
+
+      # Runs a set of commands using the runners shell
+      - name: make test
+        run: make test
