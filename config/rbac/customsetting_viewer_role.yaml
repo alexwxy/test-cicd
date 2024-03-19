@@ -1,0 +1,27 @@
+# permissions for end users to view customsettings.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: customsetting-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: bpaas-core-operator
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: customsetting-viewer-role
+rules:
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsettings
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsettings/status
+  verbs:
+  - get

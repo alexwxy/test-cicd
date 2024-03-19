@@ -1,0 +1,40 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: Init resource control policy(resourcequota) for KDP Orgnization
+  name: orgresourcecontrol-def
+spec:
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: OrgResourceControl
+  schematic:
+    cue:
+      template: |2
+        if parameter.resourceQuota != _|_ {
+        	output: {
+        	}
+        }
+        parameter: {
+        	// Specify the resource quota policy
+        	resourceQuota?: {
+        		// Specify the resources in limits
+        		limits: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        		// Specify the resources in requests
+        		requests: {
+        			// Specify the amount of cpu for requests
+        			cpu: string
+        			// Specify the amount of memory for requests
+        			memory: string
+              // Specify the amount of storage for requests
+              storage: string
+        		}
+
+        	}
+        }

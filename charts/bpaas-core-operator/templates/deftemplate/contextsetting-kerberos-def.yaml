@@ -1,0 +1,35 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: Init kerberos context setting resource
+  name: ctx-setting-kerberos
+spec:
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: ContextSetting
+      type: kerberos
+  schematic:
+    cue:
+      template: |
+        output: {
+        	apiVersion: "v1"
+        	kind:       "ConfigMap"
+        	metadata: {
+        		name:      context.name
+        		namespace: context.namespace
+        		annotations: "bdc.bdos.io/name": context.bdcName
+        	}
+        	data: {
+            "KERBEROS_ENABLED": "\(parameter.KERBEROS_ENABLED)"
+            "KERBEROS_REALM": "\(parameter.KERBEROS_REALM)"
+          }
+        }
+
+        parameter: {
+        	// Specify kerberos enabled
+        	KERBEROS_ENABLED: *false | bool
+        	// Specify kerberos realm
+        	KERBEROS_REALM: *"BDOS.CLOUD" | string
+        }

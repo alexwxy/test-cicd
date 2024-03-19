@@ -1,0 +1,17 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  name: application-default
+spec:
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: Application
+      type: default
+  schematic:
+    cue:
+      template: |
+        output: {
+          parameter
+        }
+        parameter: {}

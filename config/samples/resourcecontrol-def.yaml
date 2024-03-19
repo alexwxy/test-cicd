@@ -1,0 +1,116 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: Init resource control policy(resourcequota or limitrange)
+  name: resourcecontrol-def
+spec:
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: ResourceControl
+  schematic:
+    cue:
+      template: |2
+        if parameter.resourceQuota != _|_ {
+        	output: {
+        		apiVersion: "v1"
+        		kind:       "ResourceQuota"
+        		metadata: {
+        			name:      context.bdcName + "-resourcequota"
+        			namespace: context.namespace
+              annotations: "bdc.bdos.io/name": context.bdcName
+        		}
+        		spec: hard: {
+        			"limits.cpu":       parameter.resourceQuota.limits.cpu
+        			"limits.memory":    parameter.resourceQuota.limits.memory
+        			"requests.cpu":     parameter.resourceQuota.requests.cpu
+        			"requests.memory":  parameter.resourceQuota.requests.memory
+        			"requests.storage": parameter.resourceQuota.requests.storage
+        		}
+        	}
+        }
+        if parameter.limitRange != _|_ {
+        	outputs: limitRange: {
+        		apiVersion: "v1"
+        		kind:       "LimitRange"
+        		metadata: {
+        			name:      context.bdcName + "-limitrange"
+        			namespace: context.namespace
+              annotations: "bdc.bdos.io/name": context.bdcName
+        		}
+        		spec: limits: [
+        			{
+        				type: "Container"
+        				max: {
+        					cpu:    parameter.limitRange.max.cpu
+        					memory: parameter.limitRange.max.memory
+        				}
+        				min: {
+        					cpu:    parameter.limitRange.min.cpu
+        					memory: parameter.limitRange.min.memory
+        				}
+        				default: {
+        					cpu:    parameter.limitRange.default.cpu
+        					memory: parameter.limitRange.default.memory
+        				}
+        				defaultRequest: {
+        					cpu:    parameter.limitRange.defaultRequest.cpu
+        					memory: parameter.limitRange.defaultRequest.memory
+        				}
+        			}]
+        	}
+        }
+        parameter: {
+        	// Specify the resource quota policy
+        	resourceQuota?: {
+        		// Specify the resources in limits
+        		limits: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        		// Specify the resources in requests
+        		requests: {
+        			// Specify the amount of cpu for requests
+        			cpu: string
+        			// Specify the amount of memory for requests
+        			memory: string
+        			// Specify the amount of storage for requests
+        			storage: string
+        		}
+
+        	}
+        	// Specify the limit range policy
+        	limitRange?: {
+        		// Specify the resources in maximum
+        		max: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        		// Specify the resources in minimum
+        		min: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        		// Specify the resources in default
+        		default: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        		// Specify the resources in defaultRequest
+        		defaultRequest: {
+        			// Specify the amount of cpu for limits
+        			cpu: string
+        			// Specify the amount of memory for limits
+        			memory: string
+        		}
+        	}
+        }

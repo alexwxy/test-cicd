@@ -1,0 +1,62 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: ResourceControl
+metadata:
+  labels:
+    "bdc.bdos.io/org": "bdctestorg"
+    app.kubernetes.io/name: resourcecontrol
+    app.kubernetes.io/instance: resourcecontrol-sample
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: bpaas-core-operator
+  name: resourcecontrol-sample
+  annotations:
+    "bdc.bdos.io/org": "bdctestorg"
+    "bdc.bdos.io/name": "bdc-sample5"      # 必填，需要用于关联BigDataCluster CR中namespace信息
+spec:
+  # TODO(user): Add fields here
+  resourceQuota:
+    limits:
+      cpu: '1'
+      memory: '1024'
+    requests:
+      cpu: '0.1'
+      memory: '128'
+      storage: '1Gi'
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: ResourceControl
+metadata:
+  labels:
+    "bdc.bdos.io/org": "bdctestorg"
+    app.kubernetes.io/name: resourcecontrol
+    app.kubernetes.io/instance: resourcecontrol-sample
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: bpaas-core-operator
+  name: resourcecontrol-sample-2
+  annotations:
+    "bdc.bdos.io/org": "bdctestorg"
+    "bdc.bdos.io/name": "bdc-sample4"      # 必填，需要用于关联BigDataCluster CR中namespace信息
+spec:
+  # TODO(user): Add fields here
+  resourceQuota:
+    limits:
+      cpu: '1'
+      memory: '1024'
+    requests:
+      cpu: '0.1'
+      memory: '128'
+      storage: '1Gi'
+  limitRange:
+    max:
+      cpu: '6'
+      memory: '12Gi'
+    min:
+      cpu: '0'
+      memory: '0'
+    default:
+      cpu: '3'
+      memory: '6Gi'
+    defaultRequest:
+      cpu: '0'
+      memory: '0'

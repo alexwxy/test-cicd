@@ -1,0 +1,12 @@
+# configmap for bpaascontext
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bpaas-core-operator-configmap
+  labels:
+    bdc.bdos.io/bpaas-context: "true"
+   {{- include "bpaas-core-operator.selectorLabels" . | nindent 4 }}
+data:
+  {{ range $key, $value := .Values.bpaasContext }}
+  {{ $key }}: {{ $value | quote }}
+  {{ end }}

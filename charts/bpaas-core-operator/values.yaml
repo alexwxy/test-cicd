@@ -1,0 +1,142 @@
+# Default values for bpaas-core-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+images:
+  # -- Common tag for bpaas-core-operator images. Defaults to `.Chart.AppVersion`.
+  tag: ""
+  # -- Registry to use for the controller
+  registry: ""
+  # -- imagePullPolicy to apply to all containers
+  pullPolicy: IfNotPresent
+  # -- Secrets with credentials to pull images from a private registry
+  pullSecrets: []
+  # - name: argo-pull-secret
+
+systemNamespace:
+  create: false
+  name: kdp-system
+
+nameOverride: ""
+fullnameOverride: "bpaas-core-operator"
+
+## @param rbac.create Specifies whether a RBAC role should be created
+rbac:
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: bpaas-core-operator-sa
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+apiserver:
+  enabled: true
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8000
+  image:
+    repository: bpaas-core-operator/apiserver
+    # -- Image tag for the bpaas-core-operator apiserver. Defaults to `.Values.images.tag`.
+    tag: ""
+  Resources: {}
+  env: []
+  extraArgs: []
+
+
+controller:
+  replicaCount: 1
+  image:
+    # -- Registry to use for the controller
+    repository: bpaas-core-operator/controller
+    # -- Image tag for the bpaas-core-operator controller. Defaults to `.Values.images.tag`.
+    tag: ""
+  metricService:
+    enabled: true
+    type: ClusterIP
+    port: 8080
+  healthzService:
+    type: ClusterIP
+    port: 9440
+  Resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi
+  env: []
+  extraArgs: []
+  args:
+    concurrentReconciles: 5
+    reSyncPeriod: 10s
+
+bpaasContext:
+  K8S_IMAGE_PULL_SECRETS_NAME: devregistry
+  admin_bdos_domain: http://admin-bdos.bdos.io
+  admin_user_keytab_data_pvc_name: admin-user-keytab-data-pvc
+  default_system_namespace: admin
+  default_system_user: dcos
+  docker_registry: od-registry.bdos.io
+  domain_suffix: svc.cluster.local
+  helm_repo_url: https://nx.bdos.io/repository/helm-hosted/
+  home_mapping_dir: /keytab
+  ingress.cookie_name: kdp_oidc
+  ingress.listen_protocol: https
+  ingress.root_domain: online.bdos.io
+  ingress.tls_secret_name: online.bdos.io
+  kerberos_config.kerberos_realm: BDOS.CLOUD
+  keycloak_clients.hue.clientSecret: 1fbd35db-7373-4b03-99af-f342964392e8
+  keycloak_clients.hue.realm: bdos
+  keycloak_domain: https://bo-sso.bdos.io
+  keytab_data_pv_name: home-keytab-data
+  keytab_data_pvc_name: home-keytab-data-pvc
+  keytab_host_path_dir: /home
+  ranger_admin_domain: https://ranger-admin.online.bdos.io
+  storage_config.storage_class_mapping.local_disk: lvm-localpv
+  storage_config.storage_class_mapping.nfs: kadalu.storage-path
+  tls_secret_name: online.bdos.io
+
+admissionWebhooks:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 9443
+  failurePolicy: Fail
+  certManager:
+    enabled: false
+  certificate:
+    mountPath: /k8s-webhook-server/serving-certs
+  patch:
+    enabled: true
+    image:
+      repository: oamdev/kube-webhook-certgen
+      tag: v2.4.1
+      pullPolicy: IfNotPresent
+    nodeSelector: { }
+    affinity: { }
+    tolerations: [ ]

@@ -1,0 +1,21 @@
+## Append samples you want in your CSV to this file as resources ##
+resources:
+- bdc_v1alpha1_bigdatacluster.yaml
+- bdc_v1alpha1_contextsecret.yaml
+- bdc_v1alpha1_contextsetting_kerberos.yaml
+- bdc_v1alpha1_customsecret.yaml
+- bdc_v1alpha1_customsetting.yaml
+- bdc_v1alpha1_resourcecontrol.yaml
+- bdc_v1alpha1_orgresourcecontrol.yaml
+- bigdatacluster-def.yaml
+- contextsecret-def.yaml
+- contextsetting-def.yaml
+- contextsetting-kerberos-def.yaml
+- customsecret-def.yaml
+- customsetting-def.yaml
+- orgresourcecontrol-def.yaml
+- resourcecontrol-def.yaml
+# - bdc_v1alpha1_xdefinition.yaml
+- bdc_v1alpha1_applicationdefinition.yaml
+- bdc_v1alpha1_application.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

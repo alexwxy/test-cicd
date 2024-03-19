@@ -1,0 +1,353 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: bigdatacluster-def
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "v1"
+          kind:       "Namespace"
+          metadata: {
+            name: parameter.namespaces[0].name
+            annotations: {
+              "bdc.bdos.io/name": context.name
+            }
+          }
+        }
+        outputs: {
+          for i, v in parameter.namespaces {
+            if i > 0 {
+              "objects-\(i)": {
+                apiVersion: "v1"
+                kind:       "Namespace"
+                metadata: {
+                  name: v.name
+                  annotations: {
+                    "bdc.bdos.io/name": context.name
+                  }
+                }
+              }
+            }
+          }
+        } 
+        
+        parameter: {
+          // Specify BigDataCluster to frozen status, defaults to "false"
+          frozen?: *false  | bool      
+          // Specify BigDataCluster to disabled status, defaults to "false"
+          disabled?: *false | bool  
+          // Specify BigDataCluster mapping namespaces
+          namespaces: [...{
+            // Specify namespace name
+            name: string
+            // Specify namespace is default
+            isDefault: bool
+          }
+          ]
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: BigDataCluster
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: contextsecret-def
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "v1"
+          kind:       "Secret"
+          metadata: {
+            name: parameter.name
+            namespace: context.namespace
+            annotations: {
+              "bdc.bdos.io/name": context.name
+            }
+          }
+          type: "Opaque"
+          data: parameter.data
+        }
+        
+        parameter: {
+          // Specify context secret name
+          name: string
+          // Specify context secret data
+          data: [string]: string | int | float
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: ContextSecret
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: contextsetting-def
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "v1"
+          kind:       "ConfigMap"
+          metadata: {
+            name: parameter.name
+            namespace: context.namespace
+            annotations: {
+              "bdc.bdos.io/name": context.name
+            }
+          }
+          data: parameter.data
+        }
+        
+        parameter: {
+          // Specify context setting name
+          name: string
+          // Specify context setting data
+          data: [string]: string | int | float
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: ContextSetting
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: customgtsecret-def
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "v1"
+          kind:       "Secret"
+          metadata: {
+            name: parameter.name
+            namespace: context.namespace
+            annotations: {
+              "bdc.bdos.io/name": context.name
+            }
+          }
+          type: "Opaque"
+          data: parameter.data
+        }
+        
+        parameter: {
+          // Specify custom secret name
+          name: string
+          // Specify custom secret data
+          data: [string]: string | int | float
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: CustomSecret
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: customsetting-def
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "v1"
+          kind:       "ConfigMap"
+          metadata: {
+            name: parameter.name
+            namespace: context.namespace
+            annotations: {
+              "bdc.bdos.io/name": context.name
+            }
+          }
+          data: parameter.data
+        }
+        
+        parameter: {
+          // Specify custom setting name
+          name: string
+          // Specify custom setting data
+          data: [string]: string | int | float
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: CustomSetting
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: resourcecontrol-def
+spec:
+  schematic:
+    cue:
+      template: |
+        if parameter.resourceQuota != _|_ {
+          output: {
+            apiVersion: "v1"
+            kind:       "ResourceQuota"
+            metadata: {
+              name: context.name+"-resourcequota"
+              namespace: context.namespace
+            }
+            spec: {
+              hard: {
+                "limits.cpu": parameter.resourceQuota.limits.cpu
+                "limits.memory": parameter.resourceQuota.limits.memory
+                "requests.cpu": parameter.resourceQuota.requests.cpu
+                "requests.memory": parameter.resourceQuota.requests.memory
+                "requests.storage": parameter.resourceQuota.requests.storage
+              }
+            }
+          }
+        }
+        if parameter.limitRange != _|_ {
+          outputs: limitRange: {
+            apiVersion: "v1"
+            kind:       "LimitRange"
+            metadata: {
+              name: context.name+"-limitrange"
+              namespace: context.namespace
+            }
+            spec: {
+              limits: [
+              {
+                type: "Container"
+                max: {
+                  cpu: parameter.limitRange.max.cpu
+                    memory: parameter.limitRange.max.memory
+                }
+                min: {
+                  cpu: parameter.limitRange.min.cpu
+                    memory: parameter.limitRange.min.memory
+                }
+                default: {
+                  cpu: parameter.limitRange.default.cpu
+                    memory: parameter.limitRange.default.memory
+                }
+                defaultRequest: {
+                  cpu: parameter.limitRange.defaultRequest.cpu
+                    memory: parameter.limitRange.defaultRequest.memory
+                }
+              }]
+            }
+          }
+        } 
+        parameter: {
+          // Specify the resource quota policy
+          resourceQuota?: {
+            // Specify the resources in limits
+            limits: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+            // Specify the resources in requests
+            requests: {
+              // Specify the amount of cpu for requests
+              cpu:    string
+              // Specify the amount of memory for requests
+              memory: string
+              // Specify the amount of storage for requests
+              storage: string
+            }
+
+          }
+          // Specify the limit range policy
+          limitRange?: {
+            // Specify the resources in maximum
+            max: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+            // Specify the resources in minimum
+            min: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+            // Specify the resources in default
+            default: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+            // Specify the resources in defaultRequest
+            defaultRequest: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+          }
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: ResourceControl
+---
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: ""
+  name: orgresourcecontrol-def
+spec:
+  schematic:
+    cue:
+      template: |
+        if parameter.resourceQuota != _|_ {
+          output: {
+          }
+        }
+        parameter: {
+          // Specify the resource quota policy
+          resourceQuota?: {
+            // Specify the resources in limits
+            limits: {
+              // Specify the amount of cpu for limits
+              cpu:    string
+              // Specify the amount of memory for limits
+              memory: string
+            }
+            // Specify the resources in requests
+            requests: {
+              // Specify the amount of cpu for requests
+              cpu:    string
+              // Specify the amount of memory for requests
+              memory: string
+              // Specify the amount of storage for requests
+              storage: string
+            }
+
+          }
+        }
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: OrgResourceControl

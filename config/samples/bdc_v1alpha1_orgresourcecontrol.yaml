@@ -1,0 +1,23 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: OrgResourceControl
+metadata:
+  annotations:
+    "bdc.bdos.io/org": "bdctestorg"
+  labels:
+    "bdc.bdos.io/org": "bdctestorg"
+    app.kubernetes.io/name: orgresourcecontrol
+    app.kubernetes.io/instance: orgresourcecontrol-sample
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: bpaas-core-operator
+  name: orgresourcecontrol-sample
+data:
+  # TODO(user): Add fields here
+  resourceQuota:
+    limits:
+      cpu: '1'
+      memory: '1024'
+    requests:
+      cpu: '0.1'
+      memory: '128'
+      storage: '1Gi'

@@ -1,0 +1,252 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - applications
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - applications/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - applications/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - bigdataclusters
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - bigdataclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - bigdataclusters/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsecrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsecrets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsecrets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsettings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsettings/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - contextsettings/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsecrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsecrets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsecrets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsettings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsettings/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - customsettings/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - orgresourcecontrols
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - orgresourcecontrols/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - orgresourcecontrols/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - resourcecontrols
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - resourcecontrols/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - resourcecontrols/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - xdefinitions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - xdefinitions/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - bdc.bdos.io
+  resources:
+  - xdefinitions/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - core.oam.dev/v1beta1
+  resources:
+  - applications
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch

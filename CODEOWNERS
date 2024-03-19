@@ -1,0 +1,6 @@
+# Template CODEOWNERS file
+[Documentation]
+*.md @user-permissions/CloudPlatform @vincent.song @feng.peng
+
+[SourceCode]
+* @user-permissions/CloudPlatform @vincent.song @feng.peng

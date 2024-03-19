@@ -1,0 +1,18 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: CustomSetting
+metadata:
+  labels:
+    app.kubernetes.io/name: customsetting
+    app.kubernetes.io/instance: customsetting-sample
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: bpaas-core-operator
+  name: customsetting-sample
+  annotations:
+    "bdc.bdos.io/org": "bdctestorg"
+    "bdc.bdos.io/name": "bdc-sample4"     # 必填，需要用于关联BigDataCluster CR中namespace信息
+spec:
+  # TODO(user): Add fields here
+  name: "bdc-test-promtail-args"
+  data:
+    LOKI_PUSH_URL: http://loki.admin:3100/loki/api/v1/push

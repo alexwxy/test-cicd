@@ -1,0 +1,31 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: XDefinition
+metadata:
+  annotations:
+    definition.bdc.bdos.io/description: Init custom setting resource
+  name: customsetting-def
+spec:
+  apiResource:
+    definition:
+      apiVersion: bdc.bdos.io/v1alpha1
+      kind: CustomSetting
+  schematic:
+    cue:
+      template: |
+        output: {
+        	apiVersion: "v1"
+        	kind:       "ConfigMap"
+        	metadata: {
+        		name:      parameter.name
+        		namespace: context.namespace
+        		annotations: "bdc.bdos.io/name": context.bdcName
+        	}
+        	data: parameter.data
+        }
+
+        parameter: {
+        	// Specify custom setting name
+        	name: string
+        	// Specify custom setting data
+        	data: [string]: string | int | float
+        }

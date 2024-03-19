@@ -1,0 +1,20 @@
+apiVersion: bdc.bdos.io/v1alpha1
+kind: ContextSetting
+metadata:
+  labels:
+    app.kubernetes.io/name: contextsetting
+    app.kubernetes.io/instance: contextsetting-sample
+    app.kubernetes.io/part-of: bpaas-core-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: bpaas-core-operator
+  name: contextsetting-sample
+  annotations:
+    "bdc.bdos.io/org": "bdctestorg"
+    "bdc.bdos.io/name": "bdc-sample2"    # 必填，需要用于关联BigDataCluster CR中namespace信息
+    "setting.ctx.bdc.bdos.io/type": "HDFS/KDC/..."     # 指上下文类型，分为全局类，例如KDC ,BDC类的 例如 HDFS
+    "setting.ctx.bdc.bdos.io/origin": "system/manual"  # 系统/自建，对应不同操作权限及jsonschema
+spec:
+  # TODO(user): Add fields here
+  name: "bdc-test-ctx-promtail-args"
+  properties:
+    LOKI_PUSH_URL: http://loki.admin:3100/loki/api/v1/push
