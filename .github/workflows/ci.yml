@@ -40,5 +40,6 @@ jobs:
       - name: make test
         run: |
           echo `pwd`
+          go mod tidy
           go mod vendor
           make test
